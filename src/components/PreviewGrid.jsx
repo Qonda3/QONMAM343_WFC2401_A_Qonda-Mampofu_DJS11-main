@@ -8,11 +8,14 @@ const fetchPreviews = async () => {
 };
 
 // Preview component
-const Preview = ({ imageUrl, title }) => {
+const Preview = ({ imageUrl, title, description }) => {
   return (
-    <div className="border border-gray-300 rounded-md overflow-hidden text-center">
+    <div className="bg-gray-800 border border-teal-500 rounded-md overflow-hidden text-center">
       <img src={imageUrl} alt={title} className="w-full h-auto" />
-      <h3 className="p-4 text-lg">{title}</h3>
+      <div className="p-4">
+        <h3 className="text-lg text-teal-500">{title}</h3>
+        <p className="text-gray-300 line-clamp-2">{description}</p>
+      </div>
     </div>
   );
 };
@@ -31,10 +34,19 @@ const PreviewGrid = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {previews.map((preview) => (
-        <Preview key={preview.id} imageUrl={preview.image} title={preview.title} />
-      ))}
+    <div className="bg-gray-900 min-h-screen">
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {previews.map((preview) => (
+            <Preview
+              key={preview.id}
+              imageUrl={preview.image}
+              title={preview.title}
+              description={preview.description}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

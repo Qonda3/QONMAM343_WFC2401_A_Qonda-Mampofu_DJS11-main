@@ -1,19 +1,14 @@
-// src/App.jsx
 import React from 'react';
-import PreviewGrid from './components/PreviewGrid';
-import './App.css';
+import PreviewGrid from '/components/PreviewGrid';
+import Navbar from '/components/Navbar'; 
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Podcast Previews</h1>
-      </header>
+      <Navbar /> {/* Render the Navigation component */}
       <main>
         <PreviewGrid />
       </main>
     </div>
   );
 }
-
-export default App;
