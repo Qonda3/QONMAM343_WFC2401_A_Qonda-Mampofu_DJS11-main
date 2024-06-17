@@ -10,9 +10,9 @@ const fetchPreviews = async () => {
 // Preview component
 const Preview = ({ imageUrl, title }) => {
   return (
-    <div style={previewStyle}>
-      <img src={imageUrl} alt={title} style={imageStyle} />
-      <h3 style={titleStyle}>{title}</h3>
+    <div className="border border-gray-300 rounded-md overflow-hidden text-center">
+      <img src={imageUrl} alt={title} className="w-full h-auto" />
+      <h3 className="p-4 text-lg">{title}</h3>
     </div>
   );
 };
@@ -31,37 +31,12 @@ const PreviewGrid = () => {
   }, []);
 
   return (
-    <div style={gridStyle}>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       {previews.map((preview) => (
         <Preview key={preview.id} imageUrl={preview.image} title={preview.title} />
       ))}
     </div>
   );
-};
-
-// CSS-in-JS styles
-const gridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-  gap: '16px',
-  padding: '20px',
-};
-
-const previewStyle = {
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  overflow: 'hidden',
-  textAlign: 'center',
-};
-
-const imageStyle = {
-  width: '100%',
-  height: 'auto',
-};
-
-const titleStyle = {
-  padding: '10px',
-  fontSize: '1.2em',
 };
 
 export default PreviewGrid;
