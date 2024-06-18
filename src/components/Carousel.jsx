@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './ConsoleSection.css';
+import './Carousel.css';
 import Preview from './Preview';
 
-const ConsoleSection = () => {
+const Carousel = () => {
   const [randomPreview, setRandomPreview] = useState(null);
   useEffect(() => {
     const fetchRandomPreviews = async () => {
@@ -36,4 +36,4 @@ const ConsoleSection = () => {
   )
 };
 
-export default ConsoleSection;
+export default Carousel;

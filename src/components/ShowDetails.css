@@ -1,0 +1,75 @@
+.show-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  .show-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #282828;
+  }
+  
+  .show-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .show-info {
+    margin-left: 20px;
+    flex-grow: 1;
+  }
+  
+  .show-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .show-description {
+    font-size: 1rem;
+    color: #b3b3b3;
+  }
+  
+  .seasons {
+    padding: 20px 0;
+  }
+  
+  .season {
+    margin-bottom: 40px;
+  }
+  
+  .season-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #1db954;
+  }
+  
+  .episodes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .episode {
+    background-color: #282828;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .episode-title {
+    font-size: 1.1rem;
+    font-weight: medium;
+    margin: 0;
+  }
+  

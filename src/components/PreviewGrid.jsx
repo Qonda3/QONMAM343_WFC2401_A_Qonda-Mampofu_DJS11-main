@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Preview from './Preview';
-import ConsoleSection from './ConsoleSection';
+import Carousel from './Carousel';
+import { Link } from 'react-router-dom';
 
 // Fetch function to get preview data
 const fetchPreviews = async (genre = null) => {
@@ -15,6 +16,7 @@ const fetchPreviews = async (genre = null) => {
 };
 
 const PreviewGrid = () => {
+  // State variable for previews
   const [previews, setPreviews] = useState([]);
   const [activeGenre, setActiveGenre] = useState(null);
 
@@ -47,7 +49,6 @@ const PreviewGrid = () => {
     <div className="bg-gray-900 min-h-screen">
       <Navbar />
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-
         {/* Explore section with genre buttons */}
         <div className="flex justify-center mb-4">
           {genres.map((genre) => (
@@ -66,18 +67,23 @@ const PreviewGrid = () => {
         </div>
 
         {/* Render the ConsoleSection component */}
-        <ConsoleSection />
+        <Carousel />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {previews.map((preview) => (
-            <Preview
-              key={preview.id}
-              imageUrl={preview.image}
-              title={preview.title}
-              description={preview.description}
-            />
-          ))}
-        </div>
+        {previews.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {previews.map((preview) => (
+              <Link key={preview.id} to={`/shows/${preview.id}`}>
+                <Preview
+                  imageUrl={preview.image}
+                  title={preview.title}
+                  description={preview.description}
+                />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     </div>
   );
