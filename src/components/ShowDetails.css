@@ -1,8 +1,17 @@
-.show-details-container {
+/* Ensure the entire background is dark */
+body, html {
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .show-details-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #121212;
+    background-color: #121212; /* Dark background */
     color: #ffffff;
   }
   
@@ -72,4 +81,5 @@
     font-weight: medium;
     margin: 0;
   }
+  
   
