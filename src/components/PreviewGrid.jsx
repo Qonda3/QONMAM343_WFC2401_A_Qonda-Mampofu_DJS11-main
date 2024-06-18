@@ -11,12 +11,30 @@ const fetchPreviews = async (genre = null) => {
     url = `https://podcast-api.netlify.app/genre/${genre}`;
   }
   const response = await fetch(url);
-  const data = await response.json();
-  return data;
+  const shows = await response.json();
+
+  const fetchShowDetails = async (id) => {
+    const showUrl = `https://podcast-api.netlify.app/id/${id}`;
+    const showResponse = await fetch(showUrl);
+    const showData = await showResponse.json();
+    return showData;
+  };
+
+  const previewsWithDetails = await Promise.all(
+    shows.map(async (show) => {
+      const showDetails = await fetchShowDetails(show.id);
+      return {
+        ...show,
+        seasonsCount: showDetails.seasons.length,
+        lastUpdated: showDetails.updated, // assuming the field is 'updated'
+      };
+    })
+  );
+
+  return previewsWithDetails;
 };
 
 const PreviewGrid = () => {
-  // State variable for previews
   const [previews, setPreviews] = useState([]);
   const [activeGenre, setActiveGenre] = useState(null);
 
@@ -49,7 +67,6 @@ const PreviewGrid = () => {
     <div className="bg-gray-900 min-h-screen">
       <Navbar />
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        {/* Explore section with genre buttons */}
         <div className="flex justify-center mb-4">
           {genres.map((genre) => (
             <button
@@ -66,7 +83,6 @@ const PreviewGrid = () => {
           ))}
         </div>
 
-        {/* Render the ConsoleSection component */}
         <Carousel />
 
         {previews.length > 0 ? (
@@ -77,6 +93,8 @@ const PreviewGrid = () => {
                   imageUrl={preview.image}
                   title={preview.title}
                   description={preview.description}
+                  seasonsCount={preview.seasonsCount} // Pass the number of seasons
+                  lastUpdated={preview.lastUpdated} // Pass the last updated date
                 />
               </Link>
             ))}
