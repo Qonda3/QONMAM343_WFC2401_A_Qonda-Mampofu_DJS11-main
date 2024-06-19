@@ -40,6 +40,7 @@ const PreviewGrid = () => {
   const [activeGenre, setActiveGenre] = useState(null);
 
   const genres = [
+    { id: 0, name: 'All' }, 
     { id: 1, name: 'Personal Growth' },
     { id: 2, name: 'Investigative Journalism' },
     { id: 3, name: 'History' },
@@ -78,7 +79,7 @@ const PreviewGrid = () => {
           {genres.map((genre) => (
             <button
               key={genre.id}
-              className={`px-4 py-2 rounded-md mx-2 ${
+              className={`px-4 py-2 rounded-md mx-2 text-sm ${
                 activeGenre === genre.id
                   ? 'bg-teal-500 text-white'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
