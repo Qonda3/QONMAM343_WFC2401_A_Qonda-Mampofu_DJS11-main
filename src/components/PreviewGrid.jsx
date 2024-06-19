@@ -4,43 +4,77 @@ import Preview from './Preview';
 import Carousel from './Carousel';
 import { Link } from 'react-router-dom';
 
-// Fetch function to get preview data
 const fetchPreviews = async (genre = null) => {
   let url = 'https://podcast-api.netlify.app';
-  if (genre) {
+  if (genre && genre !== 0) {
     url = `https://podcast-api.netlify.app/genre/${genre}`;
   }
   const response = await fetch(url);
-  const shows = await response.json();
+  const data = await response.json();
 
-  const fetchShowDetails = async (id) => {
-    const showUrl = `https://podcast-api.netlify.app/id/${id}`;
-    const showResponse = await fetch(showUrl);
-    const showData = await showResponse.json();
-    return showData;
-  };
+  // Check if the response is an array (for the "All" genre case)
+  if (Array.isArray(data)) {
+    // Fetch show details for each show
+    const fetchShowDetails = async (id) => {
+      const showUrl = `https://podcast-api.netlify.app/id/${id}`;
+      const showResponse = await fetch(showUrl);
+      const showData = await showResponse.json();
+      return showData;
+    };
 
-  const previewsWithDetails = await Promise.all(
-    shows.map(async (show) => {
-      const showDetails = await fetchShowDetails(show.id);
-      return {
-        ...show,
-        seasonsCount: showDetails.seasons.length,
-        lastUpdated: showDetails.updated,
-        genres: showDetails.genres, // Add genres to the preview data
-      };
-    })
-  );
+    const previewsWithDetails = await Promise.all(
+      data.map(async (show) => {
+        const showDetails = await fetchShowDetails(show.id);
+        return {
+          id: showDetails.id,
+          title: showDetails.title,
+          description: showDetails.description,
+          image: showDetails.image,
+          seasonsCount: showDetails.seasons.length,
+          lastUpdated: showDetails.updated,
+          genres: showDetails.genres,
+        };
+      })
+    );
 
-  return previewsWithDetails;
+    return previewsWithDetails;
+  } else {
+    // Handle the case when the API returns an object (genre data)
+    const showIds = data.shows;
+
+    // Fetch show details for each show ID
+    const fetchShowDetails = async (id) => {
+      const showUrl = `https://podcast-api.netlify.app/id/${id}`;
+      const showResponse = await fetch(showUrl);
+      const showData = await showResponse.json();
+      return showData;
+    };
+
+    const previewsWithDetails = await Promise.all(
+      showIds.map(async (showId) => {
+        const showDetails = await fetchShowDetails(showId);
+        return {
+          id: showDetails.id,
+          title: showDetails.title,
+          description: showDetails.description,
+          image: showDetails.image,
+          seasonsCount: showDetails.seasons.length,
+          lastUpdated: showDetails.updated,
+          genres: showDetails.genres,
+        };
+      })
+    );
+
+    return previewsWithDetails;
+  }
 };
 
 const PreviewGrid = () => {
   const [previews, setPreviews] = useState([]);
-  const [activeGenre, setActiveGenre] = useState(null);
+  const [activeGenre, setActiveGenre] = useState(0); // Default to "All" genre
 
   const genres = [
-    { id: 0, name: 'All' }, 
+    { id: 0, name: 'All' },
     { id: 1, name: 'Personal Growth' },
     { id: 2, name: 'Investigative Journalism' },
     { id: 3, name: 'History' },
@@ -67,8 +101,8 @@ const PreviewGrid = () => {
     getPreviews();
   }, [activeGenre]);
 
-  const handleGenreClick = (genre) => {
-    setActiveGenre(genre);
+  const handleGenreClick = (genreId) => {
+    setActiveGenre(genreId);
   };
 
   return (
