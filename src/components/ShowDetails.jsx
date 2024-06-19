@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import AudioPlayer from './AudioPlayer';
 
 const fetchShowDetails = async (id) => {
   const url = `https://podcast-api.netlify.app/id/${id}`;
@@ -13,6 +14,7 @@ const ShowDetails = () => {
   const [show, setShow] = useState(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [expandedSeason, setExpandedSeason] = useState(null);
+  const [selectedEpisode, setSelectedEpisode] = useState(null);
 
   useEffect(() => {
     const getShowDetails = async () => {
@@ -31,12 +33,17 @@ const ShowDetails = () => {
     setShowFullDescription(!showFullDescription);
   };
 
-  const toggleSeasonEpisodes = (seasonIndex) => {
+  const toggleSeasonEpisodes = (seasonIndex, episodeIndex) => {
     setExpandedSeason((prev) => (prev === seasonIndex ? null : seasonIndex));
+    if (episodeIndex !== undefined) {
+      setSelectedEpisode(show.seasons[seasonIndex].episodes[episodeIndex]);
+    } else {
+      setSelectedEpisode(null);
+    }
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen text-white">
+    <div className="bg-gray-900 min-h-screen text-white p-20">
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row mb-4">
           <img
@@ -93,7 +100,8 @@ const ShowDetails = () => {
                           {season.episodes.map((episode, episodeIndex) => (
                             <li
                               key={`${season.id}-${episodeIndex}`}
-                              className="bg-gray-700 rounded-md p-2"
+                              className="bg-gray-700 rounded-md p-2 cursor-pointer"
+                              onClick={() => toggleSeasonEpisodes(index, episodeIndex)}
                             >
                               <h5 className="text-base font-medium">
                                 {episode.title}
@@ -108,6 +116,7 @@ const ShowDetails = () => {
             </div>
           </div>
         )}
+        {selectedEpisode && <AudioPlayer episode={selectedEpisode} />}
       </div>
     </div>
   );
