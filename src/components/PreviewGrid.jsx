@@ -26,7 +26,8 @@ const fetchPreviews = async (genre = null) => {
       return {
         ...show,
         seasonsCount: showDetails.seasons.length,
-        lastUpdated: showDetails.updated, // assuming the field is 'updated'
+        lastUpdated: showDetails.updated,
+        genres: showDetails.genres, // Add genres to the preview data
       };
     })
   );
@@ -99,8 +100,9 @@ const PreviewGrid = () => {
                   imageUrl={preview.image}
                   title={preview.title}
                   description={preview.description}
-                  seasonsCount={preview.seasonsCount} // Pass the number of seasons
-                  lastUpdated={preview.lastUpdated} // Pass the last updated date
+                  seasonsCount={preview.seasonsCount}
+                  lastUpdated={preview.lastUpdated}
+                  genres={preview.genres} // Pass genres to the Preview component
                 />
               </Link>
             ))}
