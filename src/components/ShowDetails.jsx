@@ -59,6 +59,8 @@ const ShowDetails = () => {
             {showFullDescription && (
               <div className="mt-4">
                 <strong>Genres: </strong>{show.genres.join(', ')}
+                <br />
+                <strong>Seasons: </strong>{show.seasons.length}
               </div>
             )}
             <button
@@ -139,7 +141,3 @@ const ShowDetails = () => {
 };
 
 export default ShowDetails;
-
-
-
-
