@@ -58,7 +58,7 @@ const ShowDetails = () => {
             </p>
             {showFullDescription && (
               <div className="mt-4">
-                <strong>Genres: </strong>{show.genres.join(', ')}
+                <strong>Genres: </strong>{show.genres ? show.genres.join(', ') : 'N/A'}
                 <br />
                 <strong>Seasons: </strong>{show.seasons.length}
               </div>
