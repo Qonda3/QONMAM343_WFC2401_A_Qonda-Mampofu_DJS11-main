@@ -53,7 +53,13 @@ const PreviewGrid = () => {
   useEffect(() => {
     const getPreviews = async () => {
       const previewsData = await fetchPreviews(activeGenre);
-      setPreviews(previewsData);
+
+      // Sort previews alphabetically by title
+      const sortedPreviews = previewsData.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+
+      setPreviews(sortedPreviews);
     };
 
     getPreviews();
