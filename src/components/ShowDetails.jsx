@@ -56,6 +56,11 @@ const ShowDetails = () => {
             <p className={`mb-4 ${showFullDescription ? '' : 'line-clamp-4'}`}>
               {show.description}
             </p>
+            {showFullDescription && (
+              <div className="mt-4">
+                <strong>Genres: </strong>{show.genres.join(', ')}
+              </div>
+            )}
             <button
               onClick={toggleDescription}
               className="text-teal-500 hover:text-teal-700 focus:outline-none"
@@ -134,4 +139,7 @@ const ShowDetails = () => {
 };
 
 export default ShowDetails;
+
+
+
 
