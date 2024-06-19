@@ -116,7 +116,18 @@ const ShowDetails = () => {
             </div>
           </div>
         )}
-        {selectedEpisode && <AudioPlayer episode={selectedEpisode} />}
+        {selectedEpisode && (
+          <div className="mt-8">
+            <AudioPlayer
+              episode={selectedEpisode}
+              seasonImage={
+                expandedSeason !== null
+                  ? show.seasons[expandedSeason].image
+                  : show.image
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );

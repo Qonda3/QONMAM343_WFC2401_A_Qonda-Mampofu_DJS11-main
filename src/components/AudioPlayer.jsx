@@ -1,7 +1,7 @@
 // AudioPlayer.jsx
 import React, { useState, useRef } from 'react';
 
-const AudioPlayer = ({ episode }) => {
+const AudioPlayer = ({ episode, seasonImage }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
@@ -18,7 +18,7 @@ const AudioPlayer = ({ episode }) => {
     <div className="fixed bottom-0 left-0 right-0 bg-gray-800 py-4 px-6 flex items-center">
       <div className="mr-4">
         <img
-          src={episode.image || 'https://via.placeholder.com/150'}
+          src={seasonImage || 'https://via.placeholder.com/150'}
           alt={episode.title}
           className="w-16 h-16 rounded-md"
         />
