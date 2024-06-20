@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,11 +17,6 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-900 py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        <div className="flex items-center">
-          <a href="#" className="text-white font-bold text-xl">
-            Logo
-          </a>
-        </div>
         <div className="flex-1 flex justify-center">
           <form onSubmit={handleSearchSubmit} className="flex items-center">
             <input
@@ -47,3 +43,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
