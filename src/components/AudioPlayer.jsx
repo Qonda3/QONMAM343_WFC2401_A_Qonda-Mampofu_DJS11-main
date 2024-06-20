@@ -1,7 +1,6 @@
-// AudioPlayer.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const AudioPlayer = ({ episode, seasonImage }) => {
+const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
@@ -13,6 +12,19 @@ const AudioPlayer = ({ episode, seasonImage }) => {
     }
     setIsPlaying(!isPlaying);
   };
+
+  useEffect(() => {
+    if (!shouldShowPlayer) {
+      setIsPlaying(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    }
+  }, [shouldShowPlayer]);
+
+  if (!shouldShowPlayer) {
+    return null; // Don't render the AudioPlayer if shouldShowPlayer is false
+  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-800 py-4 px-6 flex items-center">
@@ -27,7 +39,7 @@ const AudioPlayer = ({ episode, seasonImage }) => {
         <h3 className="text-lg font-semibold">{episode.title}</h3>
         <audio
           ref={audioRef}
-          src={episode.audioUrl || 'https://via.placeholder.com/placeholder.mp3'}
+          src={episode.file || 'https://via.placeholder.com/placeholder.mp3'}
           controls
           className="w-full"
         ></audio>

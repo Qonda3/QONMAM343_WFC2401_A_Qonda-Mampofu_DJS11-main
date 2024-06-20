@@ -76,7 +76,7 @@ const ShowDetails = () => {
             <h2 className="text-2xl font-semibold mb-4">Seasons</h2>
             <div className="flex flex-col space-y-4">
               {show.seasons.map((season, index) => (
-                <div key={season.id} className="bg-gray-800 rounded-md p-4">
+                <div key={season.season} className="bg-gray-800 rounded-md p-4">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-4">
                       <img
@@ -106,7 +106,7 @@ const ShowDetails = () => {
                         <ul className="space-y-2">
                           {season.episodes.map((episode, episodeIndex) => (
                             <li
-                              key={`${season.id}-${episodeIndex}`}
+                              key={`${season.season}-${episodeIndex}`}
                               className="bg-gray-700 rounded-md p-2 cursor-pointer"
                               onClick={() => toggleSeasonEpisodes(index, episodeIndex)}
                             >
@@ -132,6 +132,7 @@ const ShowDetails = () => {
                   ? show.seasons[expandedSeason].image
                   : show.image
               }
+              shouldShowPlayer={true}
             />
           </div>
         )}
@@ -141,3 +142,4 @@ const ShowDetails = () => {
 };
 
 export default ShowDetails;
+
