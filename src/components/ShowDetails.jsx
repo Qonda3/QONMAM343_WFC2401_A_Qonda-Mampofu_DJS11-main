@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AudioPlayer from './AudioPlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as regularHeart, faHeartBroken as solidHeart, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as solidHeart, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const fetchShowDetails = async (id) => {
   const url = `https://podcast-api.netlify.app/id/${id}`;
@@ -18,6 +19,7 @@ const ShowDetails = () => {
   const [expandedSeason, setExpandedSeason] = useState(null);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const getShowDetails = async () => {
@@ -25,6 +27,10 @@ const ShowDetails = () => {
       setShow(showData);
     };
     getShowDetails();
+
+    // Load favorites from localStorage
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setFavorites(storedFavorites);
   }, [id]);
 
   if (!show) {
@@ -42,6 +48,19 @@ const ShowDetails = () => {
   const selectEpisode = (seasonIndex, episodeIndex) => {
     setSelectedEpisode(show.seasons[seasonIndex].episodes[episodeIndex]);
     setIsPlaying(true);
+  };
+
+  const toggleFavorite = (episode) => {
+    const newFavorites = favorites.some(fav => fav.id === episode.id)
+      ? favorites.filter(fav => fav.id !== episode.id)
+      : [...favorites, { ...episode, showId: id, showTitle: show.title }];
+    
+    setFavorites(newFavorites);
+    localStorage.setItem('favorites', JSON.stringify(newFavorites));
+  };
+
+  const isEpisodeFavorite = (episodeId) => {
+    return favorites.some(fav => fav.id === episodeId);
   };
 
   return (
@@ -126,12 +145,14 @@ const ShowDetails = () => {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    // Handle like functionality here
+                                    toggleFavorite(episode);
                                   }}
-                                  className="text-gray-400 hover:text-red-500 focus:outline-none mr-4"
+                                  className={`text-gray-400 hover:text-red-500 focus:outline-none mr-4 ${
+                                    isEpisodeFavorite(episode.id) ? 'text-red-500' : ''
+                                  }`}
                                 >
                                   <FontAwesomeIcon
-                                    icon={regularHeart}
+                                    icon={isEpisodeFavorite(episode.id) ? solidHeart : regularHeart}
                                     size="lg"
                                   />
                                 </button>
