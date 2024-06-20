@@ -1,11 +1,26 @@
 import React from 'react';
 
-const Preview = ({ imageUrl, title, description, seasonsCount, lastUpdated, genres }) => {
+const genreNames = [
+  'All',
+  'Personal Growth',
+  'Investigative Journalism',
+  'History',
+  'Comedy',
+  'Entertainment',
+  'Business',
+  'Fiction',
+  'News',
+  'Kids and Family',
+];
+
+const Preview = ({ imageUrl, title, description, seasonsCount, lastUpdated, genres = [] }) => {
   const formattedDate = new Date(lastUpdated).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
+
+  const genreNamesArray = genres.map((genreId) => genreNames[genreId]);
 
   return (
     <div className="bg-gray-800 border border-teal-500 rounded-md overflow-hidden text-center">
@@ -14,7 +29,7 @@ const Preview = ({ imageUrl, title, description, seasonsCount, lastUpdated, genr
         <h3 className="text-lg text-teal-500">{title}</h3>
         <p className="text-gray-300 line-clamp-2">{description}</p>
         {genres && genres.length > 0 && (
-          <p className="text-gray-400">Genres: {genres.join(', ')}</p>
+          <p className="text-gray-400">Genres: {genreNamesArray.join(', ')}</p>
         )}
         <p className="text-gray-400">Seasons: {seasonsCount}</p>
         <p className="text-gray-400">Last updated: {formattedDate}</p>

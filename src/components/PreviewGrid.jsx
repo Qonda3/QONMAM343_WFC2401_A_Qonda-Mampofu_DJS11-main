@@ -5,67 +5,26 @@ import Carousel from './Carousel';
 import { Link } from 'react-router-dom';
 
 const fetchPreviews = async (genre = null) => {
-  let url = 'https://podcast-api.netlify.app';
-  if (genre && genre !== 0) {
-    url = `https://podcast-api.netlify.app/genre/${genre}`;
-  }
+  const url = 'https://podcast-api.netlify.app';
   const response = await fetch(url);
   const data = await response.json();
 
-  // Check if the response is an array (for the "All" genre case)
-  if (Array.isArray(data)) {
-    // Fetch show details for each show
-    const fetchShowDetails = async (id) => {
-      const showUrl = `https://podcast-api.netlify.app/id/${id}`;
-      const showResponse = await fetch(showUrl);
-      const showData = await showResponse.json();
-      return showData;
-    };
+  // The API response is an array of previews
+  const previews = data.map((show) => ({
+    id: show.id,
+    title: show.title,
+    description: show.description,
+    image: show.image,
+    seasonsCount: show.seasons,
+    lastUpdated: show.updated,
+    genres: show.genres,
+  }));
 
-    const previewsWithDetails = await Promise.all(
-      data.map(async (show) => {
-        const showDetails = await fetchShowDetails(show.id);
-        return {
-          id: showDetails.id,
-          title: showDetails.title,
-          description: showDetails.description,
-          image: showDetails.image,
-          seasonsCount: showDetails.seasons.length,
-          lastUpdated: showDetails.updated,
-          genres: showDetails.genres,
-        };
-      })
-    );
-
-    return previewsWithDetails;
+  // Filter previews based on the selected genre
+  if (genre === null || genre === 0) {
+    return previews; // Return all previews for the "All" genre
   } else {
-    // Handle the case when the API returns an object (genre data)
-    const showIds = data.shows;
-
-    // Fetch show details for each show ID
-    const fetchShowDetails = async (id) => {
-      const showUrl = `https://podcast-api.netlify.app/id/${id}`;
-      const showResponse = await fetch(showUrl);
-      const showData = await showResponse.json();
-      return showData;
-    };
-
-    const previewsWithDetails = await Promise.all(
-      showIds.map(async (showId) => {
-        const showDetails = await fetchShowDetails(showId);
-        return {
-          id: showDetails.id,
-          title: showDetails.title,
-          description: showDetails.description,
-          image: showDetails.image,
-          seasonsCount: showDetails.seasons.length,
-          lastUpdated: showDetails.updated,
-          genres: showDetails.genres,
-        };
-      })
-    );
-
-    return previewsWithDetails;
+    return previews.filter((preview) => preview.genres.includes(genre));
   }
 };
 
