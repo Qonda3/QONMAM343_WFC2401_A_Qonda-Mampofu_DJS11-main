@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Navbar = () => {
+const Navbar = ({ onSortChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('latest');
 
@@ -15,9 +15,9 @@ const Navbar = () => {
   };
 
   const handleSortChange = (event) => {
-    setSortOption(event.target.value);
-    // Perform sorting logic here
-    console.log('Sort option:', event.target.value);
+    const newSortOption = event.target.value;
+    setSortOption(newSortOption);
+    onSortChange(newSortOption);
   };
 
   return (

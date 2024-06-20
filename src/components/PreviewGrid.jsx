@@ -30,7 +30,8 @@ const fetchPreviews = async (genre = null) => {
 
 const PreviewGrid = () => {
   const [previews, setPreviews] = useState([]);
-  const [activeGenre, setActiveGenre] = useState(0); // Default to "All" genre
+  const [activeGenre, setActiveGenre] = useState(0);
+  const [sortOption, setSortOption] = useState('latest');
 
   const genres = [
     { id: 0, name: 'All' },
@@ -48,61 +49,66 @@ const PreviewGrid = () => {
   useEffect(() => {
     const getPreviews = async () => {
       const previewsData = await fetchPreviews(activeGenre);
-
-      // Sort previews alphabetically by title
-      const sortedPreviews = previewsData.sort((a, b) =>
-        a.title.localeCompare(b.title)
-      );
-
+      const sortedPreviews = sortPreviews(previewsData, sortOption);
       setPreviews(sortedPreviews);
     };
-
     getPreviews();
-  }, [activeGenre]);
+  }, [activeGenre, sortOption]);
 
   const handleGenreClick = (genreId) => {
     setActiveGenre(genreId);
   };
 
+  const handleSortChange = (newSortOption) => {
+    setSortOption(newSortOption);
+  };
+
+  const sortPreviews = (previewsToSort, option) => {
+    switch (option) {
+      case 'aToZ':
+        return [...previewsToSort].sort((a, b) => a.title.localeCompare(b.title));
+      case 'zToA':
+        return [...previewsToSort].sort((a, b) => b.title.localeCompare(a.title));
+      case 'latest':
+        return [...previewsToSort].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+      default:
+        return previewsToSort;
+    }
+  };
+
   return (
-    <div className="bg-gray-900 min-h-screen">
-      <Navbar />
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center mb-4">
-          {genres.map((genre) => (
-            <button
-              key={genre.id}
-              className={`px-4 py-2 rounded-md mx-2 text-sm ${
-                activeGenre === genre.id
-                  ? 'bg-teal-500 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              }`}
-              onClick={() => handleGenreClick(genre.id)}
-            >
-              {genre.name}
-            </button>
-          ))}
-        </div>
-
-        <Carousel />
-
+    <div className="bg-gray-900">
+      <Navbar onSortChange={handleSortChange} />
+      <div className="flex flex-wrap justify-center">
+        {genres.map((genre) => (
+          <button
+            key={genre.id}
+            onClick={() => handleGenreClick(genre.id)}
+            className={`m-2 px-4 py-2 rounded ${
+              activeGenre === genre.id ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            {genre.name}
+          </button>
+        ))}
+      </div>
+      <Carousel />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {previews.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {previews.map((preview) => (
-              <Link key={preview.id} to={`/shows/${preview.id}`}>
-                <Preview
-                  imageUrl={preview.image}
-                  title={preview.title}
-                  description={preview.description}
-                  seasonsCount={preview.seasonsCount}
-                  lastUpdated={preview.lastUpdated}
-                  genres={preview.genres} // Pass genres to the Preview component
-                />
-              </Link>
-            ))}
-          </div>
+          previews.map((preview) => (
+            <Link key={preview.id} to={`/show/${preview.id}`}>
+              <Preview
+                imageUrl={preview.image}
+                title={preview.title}
+                description={preview.description}
+                seasonsCount={preview.seasonsCount}
+                lastUpdated={preview.lastUpdated}
+                genres={preview.genres}
+              />
+            </Link>
+          ))
         ) : (
-          <div>Loading...</div>
+          <p>Loading...</p>
         )}
       </div>
     </div>
