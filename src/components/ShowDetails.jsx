@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AudioPlayer from './AudioPlayer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as regularHeart, faHeartBroken as solidHeart, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const fetchShowDetails = async (id) => {
   const url = `https://podcast-api.netlify.app/id/${id}`;
@@ -15,11 +17,12 @@ const ShowDetails = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [expandedSeason, setExpandedSeason] = useState(null);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const getShowDetails = async () => {
       const showData = await fetchShowDetails(id);
-      console.log('showData:', showData); // Log the API response data
+      console.log('showData:', showData);
       setShow(showData);
     };
     getShowDetails();
@@ -39,6 +42,7 @@ const ShowDetails = () => {
 
   const selectEpisode = (seasonIndex, episodeIndex) => {
     setSelectedEpisode(show.seasons[seasonIndex].episodes[episodeIndex]);
+    setIsPlaying(true);
   };
 
   return (
@@ -106,12 +110,42 @@ const ShowDetails = () => {
                           {season.episodes.map((episode, episodeIndex) => (
                             <li
                               key={`${season.season}-${episodeIndex}`}
-                              className="bg-gray-700 rounded-md p-2 cursor-pointer"
+                              className="bg-gray-700 rounded-md p-4 flex items-center justify-between cursor-pointer"
                               onClick={() => selectEpisode(index, episodeIndex)}
                             >
-                              <h5 className="text-base font-medium">
-                                {episode.title}
-                              </h5>
+                              <div className="flex items-center space-x-4">
+                                <div>
+                                  <h5 className="text-base font-medium">
+                                    {episode.title}
+                                  </h5>
+                                  <p className="text-gray-400 line-clamp-2">
+                                    {episode.description}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    // Handle like functionality here
+                                  }}
+                                  className="text-gray-400 hover:text-red-500 focus:outline-none mr-4"
+                                >
+                                  <FontAwesomeIcon
+                                    icon={regularHeart}
+                                    size="lg"
+                                  />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    selectEpisode(index, episodeIndex);
+                                  }}
+                                  className="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 focus:outline-none"
+                                >
+                                  <FontAwesomeIcon icon={faPlay} />
+                                </button>
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -131,8 +165,8 @@ const ShowDetails = () => {
                   ? show.seasons[expandedSeason].image
                   : show.image
               }
-              shouldShowPlayer={true}
-              key={selectedEpisode.file} // Add a key to force re-render when episode changes
+              shouldShowPlayer={isPlaying}
+              key={selectedEpisode.file}
             />
           </div>
         )}
@@ -142,6 +176,3 @@ const ShowDetails = () => {
 };
 
 export default ShowDetails;
-
-
-

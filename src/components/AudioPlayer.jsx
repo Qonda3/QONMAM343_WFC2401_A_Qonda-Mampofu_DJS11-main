@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as regularHeart, faHeartBroken as solidHeart, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const audioRef = useRef(null);
 
   const togglePlay = () => {
@@ -11,6 +14,10 @@ const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
+  };
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
   };
 
   useEffect(() => {
@@ -32,7 +39,7 @@ const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
   }, [episode]);
 
   if (!shouldShowPlayer) {
-    return null; // Don't render the AudioPlayer if shouldShowPlayer is false
+    return null;
   }
 
   return (
@@ -46,19 +53,26 @@ const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
       </div>
       <div className="flex-grow">
         <h3 className="text-lg font-semibold">{episode.title}</h3>
+        <p className="text-gray-400">{episode.description}</p>
         <audio
           ref={audioRef}
           src={episode.file || 'https://via.placeholder.com/placeholder.mp3'}
           controls
-          className="w-full"
+          className="w-full mt-2"
         ></audio>
       </div>
-      <div>
+      <div className="ml-4 flex items-center">
+        <button
+          onClick={toggleLike}
+          className="text-gray-400 hover:text-red-500 focus:outline-none mr-4"
+        >
+          <FontAwesomeIcon icon={isLiked ? solidHeart : regularHeart} size="lg" />
+        </button>
         <button
           onClick={togglePlay}
-          className="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600"
+          className="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 focus:outline-none"
         >
-          {isPlaying ? 'Pause' : 'Play'}
+          <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
         </button>
       </div>
     </div>
