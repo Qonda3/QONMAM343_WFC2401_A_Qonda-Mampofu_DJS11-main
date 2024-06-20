@@ -22,7 +22,6 @@ const ShowDetails = () => {
   useEffect(() => {
     const getShowDetails = async () => {
       const showData = await fetchShowDetails(id);
-      console.log('showData:', showData);
       setShow(showData);
     };
     getShowDetails();
