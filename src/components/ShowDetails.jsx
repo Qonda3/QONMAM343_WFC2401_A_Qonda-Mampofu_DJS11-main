@@ -33,13 +33,12 @@ const ShowDetails = () => {
     setShowFullDescription(!showFullDescription);
   };
 
-  const toggleSeasonEpisodes = (seasonIndex, episodeIndex) => {
+  const toggleSeasonEpisodes = (seasonIndex) => {
     setExpandedSeason((prev) => (prev === seasonIndex ? null : seasonIndex));
-    if (episodeIndex !== undefined) {
-      setSelectedEpisode(show.seasons[seasonIndex].episodes[episodeIndex]);
-    } else {
-      setSelectedEpisode(null);
-    }
+  };
+
+  const selectEpisode = (seasonIndex, episodeIndex) => {
+    setSelectedEpisode(show.seasons[seasonIndex].episodes[episodeIndex]);
   };
 
   return (
@@ -108,7 +107,7 @@ const ShowDetails = () => {
                             <li
                               key={`${season.season}-${episodeIndex}`}
                               className="bg-gray-700 rounded-md p-2 cursor-pointer"
-                              onClick={() => toggleSeasonEpisodes(index, episodeIndex)}
+                              onClick={() => selectEpisode(index, episodeIndex)}
                             >
                               <h5 className="text-base font-medium">
                                 {episode.title}
@@ -133,6 +132,7 @@ const ShowDetails = () => {
                   : show.image
               }
               shouldShowPlayer={true}
+              key={selectedEpisode.file} // Add a key to force re-render when episode changes
             />
           </div>
         )}
@@ -142,4 +142,6 @@ const ShowDetails = () => {
 };
 
 export default ShowDetails;
+
+
 

@@ -22,6 +22,15 @@ const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
     }
   }, [shouldShowPlayer]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.load();
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  }, [episode]);
+
   if (!shouldShowPlayer) {
     return null; // Don't render the AudioPlayer if shouldShowPlayer is false
   }
