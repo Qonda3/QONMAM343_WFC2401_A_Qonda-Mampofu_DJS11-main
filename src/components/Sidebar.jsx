@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faHeart, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faHeart, faAngleDoubleLeft, faAngleDoubleRight, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // Set default to closed
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    navigate('/login');
   };
 
   return (
@@ -56,8 +63,18 @@ const Sidebar = () => {
           </li>
         </ul>
       </nav>
+      <div className="mt-auto ml-2 mr-1">
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 mt-4"
+        >
+          <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+          <span className={`${isOpen ? 'block' : 'hidden'}`}>Logout</span>
+        </button>
+      </div>
     </div>
   );
 };
 
 export default Sidebar;
+

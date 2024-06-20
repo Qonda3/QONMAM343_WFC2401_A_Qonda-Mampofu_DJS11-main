@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ onSortChange, onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('aToZ');
-  const navigate = useNavigate();
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -20,11 +18,6 @@ const Navbar = ({ onSortChange, onSearch }) => {
     const newSortOption = event.target.value;
     setSortOption(newSortOption);
     onSortChange(newSortOption);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    navigate('/login');
   };
 
   return (
@@ -62,14 +55,6 @@ const Navbar = ({ onSortChange, onSearch }) => {
               </svg>
             </div>
           </div>
-        </div>
-        <div>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"
-          >
-            Logout
-          </button>
         </div>
       </div>
     </nav>
