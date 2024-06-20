@@ -19,7 +19,7 @@ const ShowDetails = () => {
   const [expandedSeason, setExpandedSeason] = useState(null);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState({});
 
   useEffect(() => {
     const getShowDetails = async () => {
@@ -28,8 +28,7 @@ const ShowDetails = () => {
     };
     getShowDetails();
 
-    // Load favorites from localStorage
-    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || {};
     setFavorites(storedFavorites);
   }, [id]);
 
@@ -50,17 +49,28 @@ const ShowDetails = () => {
     setIsPlaying(true);
   };
 
-  const toggleFavorite = (episode) => {
-    const newFavorites = favorites.some(fav => fav.id === episode.id)
-      ? favorites.filter(fav => fav.id !== episode.id)
-      : [...favorites, { ...episode, showId: id, showTitle: show.title }];
+  const toggleFavorite = (episode, seasonNumber) => {
+    const episodeKey = `${id}-${seasonNumber}-${episode.episode}`;
+    const newFavorites = { ...favorites };
+    
+    if (newFavorites[episodeKey]) {
+      delete newFavorites[episodeKey];
+    } else {
+      newFavorites[episodeKey] = {
+        ...episode,
+        showId: id,
+        showTitle: show.title,
+        seasonNumber
+      };
+    }
     
     setFavorites(newFavorites);
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
 
-  const isEpisodeFavorite = (episodeId) => {
-    return favorites.some(fav => fav.id === episodeId);
+  const isEpisodeFavorite = (seasonNumber, episodeNumber) => {
+    const episodeKey = `${id}-${seasonNumber}-${episodeNumber}`;
+    return !!favorites[episodeKey];
   };
 
   return (
@@ -127,7 +137,7 @@ const ShowDetails = () => {
                         <ul className="space-y-2">
                           {season.episodes.map((episode, episodeIndex) => (
                             <li
-                              key={`${season.season}-${episodeIndex}`}
+                              key={`${season.season}-${episode.episode}`}
                               className="bg-gray-700 rounded-md p-4 flex items-center justify-between cursor-pointer"
                               onClick={() => selectEpisode(index, episodeIndex)}
                             >
@@ -145,14 +155,14 @@ const ShowDetails = () => {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    toggleFavorite(episode);
+                                    toggleFavorite(episode, season.season);
                                   }}
                                   className={`text-gray-400 hover:text-red-500 focus:outline-none mr-4 ${
-                                    isEpisodeFavorite(episode.id) ? 'text-red-500' : ''
+                                    isEpisodeFavorite(season.season, episode.episode) ? 'text-red-500' : ''
                                   }`}
                                 >
                                   <FontAwesomeIcon
-                                    icon={isEpisodeFavorite(episode.id) ? solidHeart : regularHeart}
+                                    icon={isEpisodeFavorite(season.season, episode.episode) ? solidHeart : regularHeart}
                                     size="lg"
                                   />
                                 </button>
