@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Navbar from './Navbar';
 import Preview from './Preview';
 import Carousel from './Carousel';
@@ -32,6 +32,7 @@ const PreviewGrid = () => {
   const [previews, setPreviews] = useState([]);
   const [activeGenre, setActiveGenre] = useState(0);
   const [sortOption, setSortOption] = useState('aToZ');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const genres = [
     { id: 0, name: 'All' },
@@ -49,11 +50,10 @@ const PreviewGrid = () => {
   useEffect(() => {
     const getPreviews = async () => {
       const previewsData = await fetchPreviews(activeGenre);
-      const sortedPreviews = sortPreviews(previewsData, sortOption);
-      setPreviews(sortedPreviews);
+      setPreviews(previewsData);
     };
     getPreviews();
-  }, [activeGenre, sortOption]);
+  }, [activeGenre]);
 
   const handleGenreClick = (genreId) => {
     setActiveGenre(genreId);
@@ -61,6 +61,10 @@ const PreviewGrid = () => {
 
   const handleSortChange = (newSortOption) => {
     setSortOption(newSortOption);
+  };
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   const sortPreviews = (previewsToSort, option) => {
@@ -76,9 +80,19 @@ const PreviewGrid = () => {
     }
   };
 
+  const filteredAndSortedPreviews = useMemo(() => {
+    let filtered = previews;
+    if (searchTerm) {
+      filtered = previews.filter(preview =>
+        preview.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    return sortPreviews(filtered, sortOption);
+  }, [previews, searchTerm, sortOption]);
+
   return (
     <div className="bg-gray-900">
-      <Navbar onSortChange={handleSortChange} />
+      <Navbar onSortChange={handleSortChange} onSearch={handleSearch} />
       <div className="flex flex-wrap justify-center">
         {genres.map((genre) => (
           <button
@@ -94,8 +108,8 @@ const PreviewGrid = () => {
       </div>
       <Carousel />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {previews.length > 0 ? (
-          previews.map((preview) => (
+        {filteredAndSortedPreviews.length > 0 ? (
+          filteredAndSortedPreviews.map((preview) => (
             <Link key={preview.id} to={`/show/${preview.id}`}>
               <Preview
                 imageUrl={preview.image}
@@ -108,7 +122,7 @@ const PreviewGrid = () => {
             </Link>
           ))
         ) : (
-          <p>Loading...</p>
+          <p>No results found</p>
         )}
       </div>
     </div>

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
-const Navbar = ({ onSortChange }) => {
+const Navbar = ({ onSortChange, onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('aToZ');
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    onSearch(event.target.value);
   };
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    // Perform search logic here
-    console.log('Search term:', searchTerm);
+    onSearch(searchTerm);
   };
 
   const handleSortChange = (event) => {
@@ -65,4 +65,3 @@ const Navbar = ({ onSortChange }) => {
 };
 
 export default Navbar;
-
