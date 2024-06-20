@@ -31,7 +31,7 @@ const fetchPreviews = async (genre = null) => {
 const PreviewGrid = () => {
   const [previews, setPreviews] = useState([]);
   const [activeGenre, setActiveGenre] = useState(0);
-  const [sortOption, setSortOption] = useState('latest');
+  const [sortOption, setSortOption] = useState('aToZ');
 
   const genres = [
     { id: 0, name: 'All' },
@@ -72,7 +72,7 @@ const PreviewGrid = () => {
       case 'latest':
         return [...previewsToSort].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
       default:
-        return previewsToSort;
+        return [...previewsToSort].sort((a, b) => a.title.localeCompare(b.title));
     }
   };
 

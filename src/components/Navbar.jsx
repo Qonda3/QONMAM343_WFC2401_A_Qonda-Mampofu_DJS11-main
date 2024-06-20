@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Navbar = ({ onSortChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOption, setSortOption] = useState('latest');
+  const [sortOption, setSortOption] = useState('aToZ');
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -45,7 +45,6 @@ const Navbar = ({ onSortChange }) => {
               onChange={handleSortChange}
               className="appearance-none bg-gray-700 border border-gray-600 text-white py-1 px-3 pr-8 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
             >
-              <option value="default">Default</option>
               <option value="aToZ">A-Z</option>
               <option value="zToA">Z-A</option>
               <option value="latest">Latest</option>
