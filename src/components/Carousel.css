@@ -1,4 +1,62 @@
-.carousel-section {
-    height: 280px;
-    margin-bottom: 20px; /* Add some spacing between the ConsoleSection and PreviewGrid */
-  }
+.carousel-container {
+  background: linear-gradient(to right, #4a5568, #2d3748);
+  border-radius: 8px;
+  padding: 20px;
+  color: #ffffff;
+}
+
+.carousel-content {
+  display: flex;
+  align-items: center;
+}
+
+.carousel-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 20px;
+}
+
+.carousel-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.carousel-description {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carousel-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.carousel-genre {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.loader {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid #ffffff;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
