@@ -61,14 +61,6 @@ const AudioPlayer = ({ episode, seasonImage, shouldShowPlayer }) => {
           className="w-full mt-2"
         ></audio>
       </div>
-      <div className="ml-4 flex items-center">
-        <button
-          onClick={toggleLike}
-          className="text-gray-400 hover:text-red-500 focus:outline-none mr-4"
-        >
-          <FontAwesomeIcon icon={isLiked ? solidHeart : regularHeart} size="lg" />
-        </button>
-      </div>
     </div>
   );
 };
