@@ -6,13 +6,14 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 const Favorites = () => {
   const [favorites, setFavorites] = useState({});
   const [groupedFavorites, setGroupedFavorites] = useState({});
+  const [sortOption, setSortOption] = useState('recent');
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || {};
     const updatedFavorites = addMissingDates(storedFavorites);
     setFavorites(updatedFavorites);
-    groupFavorites(updatedFavorites);
-  }, []);
+    groupAndSortFavorites(updatedFavorites, sortOption);
+  }, [sortOption]);
 
   const addMissingDates = (favs) => {
     let updated = false;
@@ -32,7 +33,7 @@ const Favorites = () => {
     return updatedFavs;
   };
 
-  const groupFavorites = (favs) => {
+  const groupAndSortFavorites = (favs, option) => {
     const grouped = Object.entries(favs).reduce((acc, [episodeKey, episode]) => {
       const showKey = `${episode.showId}-${episode.seasonNumber}`;
       if (!acc[showKey]) {
@@ -46,7 +47,42 @@ const Favorites = () => {
       acc[showKey].episodes.push({ ...episode, episodeKey });
       return acc;
     }, {});
-    setGroupedFavorites(grouped);
+
+    // Sort episodes within each show
+    Object.values(grouped).forEach(show => {
+      show.episodes.sort((a, b) => {
+        switch (option) {
+          case 'az':
+            return a.title.localeCompare(b.title);
+          case 'za':
+            return b.title.localeCompare(a.title);
+          case 'recent':
+            return b.addedAt - a.addedAt;
+          case 'oldest':
+            return a.addedAt - b.addedAt;
+          default:
+            return 0;
+        }
+      });
+    });
+
+    // Sort shows
+    const sortedGrouped = Object.entries(grouped).sort((a, b) => {
+      switch (option) {
+        case 'az':
+          return a[1].showTitle.localeCompare(b[1].showTitle);
+        case 'za':
+          return b[1].showTitle.localeCompare(a[1].showTitle);
+        case 'recent':
+          return Math.max(...b[1].episodes.map(e => e.addedAt)) - Math.max(...a[1].episodes.map(e => e.addedAt));
+        case 'oldest':
+          return Math.min(...a[1].episodes.map(e => e.addedAt)) - Math.min(...b[1].episodes.map(e => e.addedAt));
+        default:
+          return 0;
+      }
+    });
+
+    setGroupedFavorites(Object.fromEntries(sortedGrouped));
   };
 
   const removeFavorite = (episodeKey) => {
@@ -54,7 +90,7 @@ const Favorites = () => {
     delete newFavorites[episodeKey];
     setFavorites(newFavorites);
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
-    groupFavorites(newFavorites);
+    groupAndSortFavorites(newFavorites, sortOption);
   };
 
   const formatDate = (timestamp) => {
@@ -73,7 +109,19 @@ const Favorites = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-white p-20">
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold mb-4">Favorites</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-4xl font-bold">Favorites</h1>
+          <select
+            className="bg-gray-800 text-white p-2 rounded"
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+          >
+            <option value="recent">Most Recently Updated</option>
+            <option value="oldest">Furthest Back Updated</option>
+            <option value="az">A-Z</option>
+            <option value="za">Z-A</option>
+          </select>
+        </div>
         {Object.keys(favorites).length === 0 ? (
           <p>You haven't added any favorites yet.</p>
         ) : (
