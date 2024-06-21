@@ -126,9 +126,24 @@ const ShowDetails = () => {
                       onClick={() => toggleSeasonEpisodes(index)}
                       className="text-teal-500 hover:text-teal-700 focus:outline-none"
                     >
-                      {expandedSeason === index ? '-' : '+'}
+                      <svg
+                        className={`w-6 h-6 transform transition-transform ${
+                          expandedSeason === index ? 'rotate-180' : ''
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
                     </button>
-                  </div>
+                                      </div>
                   {expandedSeason === index &&
                     season.episodes &&
                     season.episodes.length > 0 && (
