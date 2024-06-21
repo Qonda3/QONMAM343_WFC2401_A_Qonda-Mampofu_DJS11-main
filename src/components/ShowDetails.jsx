@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import AudioPlayer from './AudioPlayer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as solidHeart, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as solidHeart, faPlay, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const fetchShowDetails = async (id) => {
   const url = `https://podcast-api.netlify.app/id/${id}`;
@@ -14,6 +14,7 @@ const fetchShowDetails = async (id) => {
 
 const ShowDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [show, setShow] = useState(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [expandedSeason, setExpandedSeason] = useState(null);
@@ -73,8 +74,19 @@ const ShowDetails = () => {
     return !!favorites[episodeKey];
   };
 
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
-    <div className="bg-gray-900 min-h-screen text-white p-20 pb-40">
+    <div className="bg-gray-900 min-h-screen text-white p-20 pb-40 relative">
+      <button 
+        onClick={goBack} 
+        className="absolute top-10 left-10 text-white hover:text-teal-500 focus:outline-none"
+        aria-label="Go back"
+      >
+        <FontAwesomeIcon icon={faArrowLeft} size="2x" />
+      </button>
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row mb-4">
           <img
@@ -143,7 +155,7 @@ const ShowDetails = () => {
                         />
                       </svg>
                     </button>
-                                      </div>
+                  </div>
                   {expandedSeason === index &&
                     season.episodes &&
                     season.episodes.length > 0 && (
