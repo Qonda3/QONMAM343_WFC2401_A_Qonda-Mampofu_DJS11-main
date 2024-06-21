@@ -75,6 +75,8 @@ const PreviewGrid = () => {
         return [...previewsToSort].sort((a, b) => b.title.localeCompare(a.title));
       case 'latest':
         return [...previewsToSort].sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+      case 'oldest':
+        return [...previewsToSort].sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated));
       default:
         return [...previewsToSort].sort((a, b) => a.title.localeCompare(b.title));
     }
