@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as solidHeart, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState({});
   const [groupedFavorites, setGroupedFavorites] = useState({});
   const [sortOption, setSortOption] = useState('recent');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || {};
@@ -110,7 +111,15 @@ const Favorites = () => {
     <div className="bg-gray-900 min-h-screen text-white p-20">
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-bold">Favorites</h1>
+          <div className="flex items-center">
+            <button
+              onClick={() => navigate('/')}
+              className="text-white mr-4 hover:text-gray-300 focus:outline-none"
+            >
+              <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+            </button>
+            <h1 className="text-4xl font-bold">Favorites</h1>
+          </div>
           <select
             className="bg-gray-800 text-white p-2 rounded"
             value={sortOption}
