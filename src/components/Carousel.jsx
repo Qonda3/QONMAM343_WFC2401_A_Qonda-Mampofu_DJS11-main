@@ -1,3 +1,16 @@
+const genreNames = [
+  'All',
+  'Personal Growth',
+  'Investigative Journalism',
+  'History',
+  'Comedy',
+  'Entertainment',
+  'Business',
+  'Fiction',
+  'News',
+  'Kids and Family',
+];
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Carousel.css';
@@ -25,6 +38,10 @@ const Carousel = () => {
     const interval = setInterval(fetchRandomPreviews, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const getGenreName = (genreId) => {
+    return genreNames[genreId] || 'Unknown';
+  };
 
   return (
     <div className="bg-gradient-to-r from-purple-700 to-indigo-800 rounded-lg p-6 shadow-2xl">
@@ -58,9 +75,9 @@ const Carousel = () => {
               <h3 className="text-xl font-semibold text-white mb-2">{randomPreview.title}</h3>
               <p className="text-gray-300 mb-4 line-clamp-3">{randomPreview.description}</p>
               <div className="flex space-x-2">
-                {randomPreview.genres.slice(0, 3).map((genre, index) => (
+                {randomPreview.genres.slice(0, 3).map((genreId, index) => (
                   <span key={index} className="bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
-                    {genre}
+                    {getGenreName(genreId)}
                   </span>
                 ))}
               </div>
