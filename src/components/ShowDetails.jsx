@@ -74,7 +74,7 @@ const ShowDetails = () => {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen text-white p-20">
+    <div className="bg-gray-900 min-h-screen text-white p-20 pb-40">
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row mb-4">
           <img
