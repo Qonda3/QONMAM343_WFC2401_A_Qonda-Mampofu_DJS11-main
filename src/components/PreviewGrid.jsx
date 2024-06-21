@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Preview from './Preview';
 import Carousel from './Carousel';
-import { Link } from 'react-router-dom';
 
 const fetchPreviews = async (genre = null) => {
   const url = 'https://podcast-api.netlify.app';
   const response = await fetch(url);
   const data = await response.json();
 
-  // The API response is an array of previews
   const previews = data.map((show) => ({
     id: show.id,
     title: show.title,
@@ -20,9 +19,8 @@ const fetchPreviews = async (genre = null) => {
     genres: show.genres,
   }));
 
-  // Filter previews based on the selected genre
   if (genre === null || genre === 0) {
-    return previews; // Return all previews for the "All" genre
+    return previews;
   } else {
     return previews.filter((preview) => preview.genres.includes(genre));
   }
