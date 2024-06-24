@@ -17,8 +17,7 @@ Follow these steps to get the project up and running on your local machine:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/podcast-app.git
-   cd podcast-app
+   git clone https://github.com/Qonda3/QONMAM343_WFC2401_A_Qonda-Mampofu_DJS11-main.git
 2. **Install dependencies:**
    ```bash
    npm install
