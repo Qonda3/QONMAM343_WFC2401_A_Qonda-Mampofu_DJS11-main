@@ -50,7 +50,7 @@ This project is built with the following technologies:
 - **React**: A JavaScript library for building user interfaces.
 - **React Router**: A library for routing in React applications.
 - **CSS**: For styling components.
-- **LocalStorage**: To manage user authentication state.
+- **LocalStorage**:  To persist user's favorite podcasts across sessions.
 
 ## Data
 
