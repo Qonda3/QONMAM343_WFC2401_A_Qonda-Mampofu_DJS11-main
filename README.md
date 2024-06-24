@@ -1,7 +1,8 @@
-# 🎵 PODCAST APP | PORTFOLIO PIECE 💿
+# 🎵 PRESSPLAY | PODCAST APP 💿
 
-Welcome to the Podcast Application! This project allows users to explore, manage, and enjoy various podcasts. The application features a user login system, a protected route system, and various components to display podcast details, favorites, and more.
+Welcome to PressPlay, the Podcast Application! This project allows users to explore, manage, and enjoy various podcasts. The application features a user login system, a protected route system, and various components to display podcast details, favorites, and more.
 
+**Live App:** [PressPlay](https://pressplay.netlify.app/)
 ## Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
